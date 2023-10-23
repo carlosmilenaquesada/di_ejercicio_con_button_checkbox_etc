@@ -5,13 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material3.Button
@@ -32,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.di_ejercicio_con_button_checkbox_etc.ui.theme.Di_ejercicio_con_button_checkbox_etcTheme
@@ -52,30 +57,52 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun Principal() {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(Color.Red),
+        verticalArrangement = Arrangement.SpaceAround
+    ) {
+        // 1. Un botón con el texto 'Presionar' que, al hacer clic, actualizará el mensaje en el
+        // campo de texto con 'Botón presionado' y mostrará un `CircularProgressIndicator` durante 5
+        // segundos.
         var textoBoton by rememberSaveable {
             mutableStateOf("Presionar")
         }
-        Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-            Button(modifier = Modifier
-                .padding(5.dp)
-                .width(200.dp)
-                .weight(1f), onClick = {
-                if (textoBoton == "Presionar") {
-                    textoBoton = "Botón presionado"
-                } else {
-                    textoBoton = "Presionar"
-                }
-            }) {
-                Text(text = textoBoton)
-            }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Red),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+
+
+        ) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(5.dp)
+                    .wrapContentHeight(), contentAlignment = Alignment.Center
+            ) {
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                    onClick = {
+                        textoBoton = if (textoBoton == "Presionar") {
+                            "Botón presionado"
+                        } else {
+                            "Presionar"
+                        }
+                    }) {
+                    Text(text = textoBoton)
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f), contentAlignment = Alignment.Center
             ) {
                 if (textoBoton == "Botón presionado") {
                     CircularProgressIndicator(
@@ -86,18 +113,46 @@ fun Principal() {
                 }
             }
         }
-        Column(modifier = Modifier.weight(2f)) {
+        Column(
+            modifier = Modifier
+                .background(Color.LightGray),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            // 2. Un campo de texto que mostrará un mensaje, inicialmente no visible.
             var mostrarMensaje by rememberSaveable {
-                mutableStateOf(false);
+                mutableStateOf(true)
             }
+            Box(
+                modifier = Modifier
+                    .padding(10.dp)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .height(80.dp)
+                        .fillMaxWidth()
+                        .background(Color.Gray)
+                        .padding(10.dp),
+                    text = if (mostrarMensaje) {
+                        "Este mensaje está inicalmente oculto, solo se muestra cuando se" +
+                                "marca el checkbox"
+                    } else {
+                        ""
+                    },
+
+                    textAlign = TextAlign.Justify
+                )
+
+            }
+            // 3. Una casilla de verificación (checkbox) con el texto 'Activar' que, al marcarla,
+            // mostrará el Text anterior
             Row(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
                 Checkbox(
-                    modifier = Modifier,
-
                     checked = mostrarMensaje,
                     onCheckedChange = {
                         mostrarMensaje = !mostrarMensaje
@@ -105,30 +160,36 @@ fun Principal() {
                 )
                 Text(text = "Activar texto oculto")
             }
-            Box(modifier = Modifier.weight(1f)) {
-                if (mostrarMensaje == true) {
-                    Text(
-                        modifier = Modifier.padding(15.dp),
-                        text = "Este mensaje está inicalmente oculto, solo se muestra cuando se marca el checkbox"
-                    )
-                }
-            }
+
         }
+        // 4. Un icono de tu elección que se mostrará siempre en la interfaz.
         Icon(
-            modifier = Modifier.weight(0.5f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Cyan),
             imageVector = Icons.Rounded.Face,
             contentDescription = "Icono",
             tint = Color.Red
         )
 
-        Column(modifier = Modifier.weight(5f)) {
-            var estadoSwitch by rememberSaveable {
-                mutableStateOf(false)
-            }
+        Column(
+            modifier = Modifier
+                .background(Color.Red)
+                .padding(10.dp)
 
-            Row(modifier = Modifier.weight(1f)) {
+        ) {
+            // 5. Un interruptor (switch) que mostrará en grupo de botones siguiente(punto 6)
+            var estadoSwitch by rememberSaveable {
+                mutableStateOf(true)
+            }
+            Row(
+                modifier = Modifier
+                    .background(Color.LightGray)
+                    .wrapContentHeight(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Switch(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.5f),
                     checked = estadoSwitch,
                     onCheckedChange = { estadoSwitch = !estadoSwitch })
                 Text(
@@ -136,46 +197,63 @@ fun Principal() {
                     text = "Activar/Desactivar radio button group"
                 )
             }
-            Column(modifier = Modifier.weight(4f)) {
-                var radioButtonElegido by rememberSaveable {
-                    mutableStateOf("Button 1")
-                }
+            // 6. Un grupo de botones de radio (radiobutton) con al menos tres opciones distintas
+            // que permitirá al usuario seleccionar una opción y actualizar el mensaje del campo de
+            // texto en consecuencia
+            Column(
+                modifier = Modifier
+                    .background(Color.Gray)
+                    .fillMaxWidth()
+                    .padding(10.dp)
 
-                if (estadoSwitch) {
-                    Column {
-                        Row {
+            ) {
+                var radioButtonElegido by rememberSaveable {
+                    mutableStateOf("Opción 1")
+                }
+                Column(modifier = Modifier.height(200.dp)) {
+                    if (estadoSwitch) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
-                                selected = radioButtonElegido == "Button 1",
-                                onClick = { radioButtonElegido = "Button 1" })
+                                selected = radioButtonElegido == "Opción 1",
+                                onClick = { radioButtonElegido = "Opción 1" })
                             Text(text = "Opción 1")
                         }
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
-                                selected = radioButtonElegido == "Button 2",
-                                onClick = { radioButtonElegido = "Button 2" })
+                                selected = radioButtonElegido == "Opción 2",
+                                onClick = { radioButtonElegido = "Opción 2" })
                             Text(text = "Opción 2")
                         }
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
-                                selected = radioButtonElegido == "Button 3",
-                                onClick = { radioButtonElegido = "Button 3" })
+                                selected = radioButtonElegido == "Opción 3",
+                                onClick = { radioButtonElegido = "Opción 3" })
                             Text(text = "Opción 3")
                         }
 
-                        Text(text = "El botón elegido es el " + radioButtonElegido)
+                        Text(text = "El botón elegido es: $radioButtonElegido")
                     }
                 }
             }
         }
 
-        Box(modifier = Modifier.weight(3f)) {
+        // 7. Una imagen que se actualizará al hacer clic en el botón. La imagen puede cambiar entre al menos
+        //tres imágenes diferentes.
+        Column(
+            modifier = Modifier
+                .background(Color.Red)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
             var imagen by rememberSaveable {
-                mutableStateOf(1)
+                mutableStateOf(R.drawable.gato)
             }
             Image(painter = painterResource(id = imagen), contentDescription = "animal")
 
             Button(onClick = {
-                imagen = cambiarNumero(imagen)
+
+                imagen = cambiarImagen(imagen)
             }) {
                 Text(text = "Cambiar imagen")
             }
@@ -183,17 +261,17 @@ fun Principal() {
     }
 }
 
-fun cambiarNumero(numero: Int): Int {
-    if (numero == 1) {
-        return 2;
+fun cambiarImagen(numeroImagen: Int): Int {
+    return if (numeroImagen == R.drawable.gato) {
+        R.drawable.perro
     } else {
-        if (numero == 2) {
-            return 3;
+        if (numeroImagen == R.drawable.perro) {
+            R.drawable.loro
         } else {
-            if (numero == 3) {
-                return 1;
+            if (numeroImagen == R.drawable.loro) {
+                R.drawable.gato
             } else {
-                return numero;
+                R.drawable.gato
             }
         }
     }
