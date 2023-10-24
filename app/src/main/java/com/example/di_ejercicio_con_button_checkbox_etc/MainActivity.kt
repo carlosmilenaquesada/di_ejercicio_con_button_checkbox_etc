@@ -39,9 +39,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import com.example.di_ejercicio_con_button_checkbox_etc.ui.theme.Di_ejercicio_con_button_checkbox_etcTheme
-//para las corrutinas
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+//para las corrutinas, no podemos usar las de kotlin, sino las de android
+//hay que importar lo siguiente:
+//implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+//y pasar lifecycleScope por parámetro del método principal, y en la creación del método principal, ponemos scope: lifecycleCoroutineScope
+//y por último programamos el mostrar la barra de carga con un delay
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,16 +60,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Principal()
+                    Principal(lifecycleScope)
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun Principal() {
+fun Principal(scope: LifecycleCoroutineScope) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -92,10 +100,12 @@ fun Principal() {
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp),
                     onClick = {
-                        textoBoton = if (textoBoton == "Presionar") {
-                            "Botón presionado"
-                        } else {
-                            "Presionar"
+                        if (textoBoton == "Presionar") {
+                            textoBoton = "Botón presionado"
+                            scope.launch {
+                                delay(700)
+                                textoBoton = "Presionar"
+                            }
                         }
                     }) {
                     Text(text = textoBoton)
