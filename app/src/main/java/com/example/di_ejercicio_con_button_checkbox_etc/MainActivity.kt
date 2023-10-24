@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.di_ejercicio_con_button_checkbox_etc.ui.theme.Di_ejercicio_con_button_checkbox_etcTheme
+//para las corrutinas
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
