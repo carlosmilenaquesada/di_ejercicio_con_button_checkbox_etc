@@ -102,7 +102,7 @@ fun Principal(scope: LifecycleCoroutineScope) {
                         if (textoBoton == "Presionar") {
                             textoBoton = "Botón presionado"
                             scope.launch {
-                                delay(700)
+                                delay(5000)
                                 textoBoton = "Presionar"
                             }
                         }
@@ -130,7 +130,7 @@ fun Principal(scope: LifecycleCoroutineScope) {
         ) {
             // 2. Un campo de texto que mostrará un mensaje, inicialmente no visible.
             var mostrarMensaje by rememberSaveable {
-                mutableStateOf(true)
+                mutableStateOf(false)
             }
             Box(
                 modifier = Modifier
@@ -190,7 +190,7 @@ fun Principal(scope: LifecycleCoroutineScope) {
         ) {
             // 5. Un interruptor (switch) que mostrará en grupo de botones siguiente(punto 6)
             var estadoSwitch by rememberSaveable {
-                mutableStateOf(true)
+                mutableStateOf(false)
             }
             Row(
                 modifier = Modifier
